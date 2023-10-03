@@ -1,34 +1,22 @@
-import { Component } from '@angular/core';
-import {
-	AccountUpdate,
-	declareMethods,
-	declareState,
-	Field,
-	isReady, method,
-	Mina,
-	PrivateKey,
-	shutdown,
-	SmartContract, state,
-	State
-} from 'o1js';
+import { Component, OnInit } from '@angular/core';
+import init from './o1';
 
 // DECORATORS VERSION (ORIGINAL)
-class Square extends SmartContract {
-	@state(Field) num = State<Field>();
-
-	override init() {
-		super.init();
-		this.num.set(Field(3));
-	}
-
-	@method update(square: Field) {
-		const currentState = this.num.get();
-		this.num.assertEquals(currentState);
-		square.assertEquals(currentState.mul(currentState));
-		this.num.set(square);
-	}
-}
-
+// class Square extends SmartContract {
+// 	@state(Field) num = State<Field>();
+//
+// 	override init() {
+// 		super.init();
+// 		this.num.set(Field(3));
+// 	}
+//
+// 	@method update(square: Field) {
+// 		const currentState = this.num.get();
+// 		this.num.assertEquals(currentState);
+// 		square.assertEquals(currentState.mul(currentState));
+// 		this.num.set(square);
+// 	}
+// }
 // NON-DECORATORS VERSION (SUGGESTED FOR JAVASCRIPT) - but same behaviour
 // class Square extends SmartContract {
 // 	num: State<Field> = State();
@@ -53,22 +41,22 @@ class Square extends SmartContract {
 	templateUrl: './app.component.html',
 	styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
 
-	constructor() {
-		(window as any)._mainWorker = '1';
-		(document as any)._mainWorker = '2';
+	ngOnInit() {
+		this.loadO1JS();
 	}
 
 	async loadO1JS() {
 
-		await isReady;
+		init();
+		// await isReady;
+		//
+		// console.log('o1js loaded');
 
-		console.log('o1js loaded');
-
-		const useProof = false;
-
-		const Local = Mina.LocalBlockchain({ proofsEnabled: useProof });
+		// const useProof = false;
+		//
+		// const Local = Mina.LocalBlockchain({ proofsEnabled: useProof });
 // 		Mina.setActiveInstance(Local);
 // 		const { privateKey: deployerKey, publicKey: deployerAccount } = Local.testAccounts[0];
 // 		const { privateKey: senderKey, publicKey: senderAccount } = Local.testAccounts[1];
